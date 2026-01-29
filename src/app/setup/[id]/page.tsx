@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { supabase } from '../../../utils/supabaseClient';
 import { motion } from 'framer-motion';
 import { Gift, Check, Sparkles, Save } from 'lucide-react';
@@ -9,11 +9,21 @@ import { fortunes, FortuneTheme } from '../../../data/fortunes';
 
 export default function SetupPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
+
   const rabbitId = params.id as string;
+  const colorParam = searchParams.get('color') as FortuneTheme | null;
+
+  // 색상: URL 파라미터에서 가져오거나 기본값 pink
+  const selectedColor: FortuneTheme =
+    colorParam && Object.keys(fortunes).includes(colorParam)
+      ? colorParam
+      : 'pink';
+
+  const theme = fortunes[selectedColor];
 
   const [status, setStatus] = useState<'loading' | 'ready' | 'registered' | 'complete'>('loading');
   const [inputMsg, setInputMsg] = useState('');
-  const [selectedColor, setSelectedColor] = useState<FortuneTheme>('pink');
   const [isSaving, setIsSaving] = useState(false);
 
   // 초기 상태 체크
@@ -127,46 +137,36 @@ export default function SetupPage() {
         className="w-full max-w-sm"
       >
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Gift className="w-8 h-8 text-pink-500" />
+          <div className={`w-20 h-20 ${theme.bg} rounded-full flex items-center justify-center mx-auto mb-4 text-4xl border-2 ${theme.border}`}>
+            {theme.icon}
           </div>
-          <h1 className="text-2xl font-bold text-[#5D4037] mb-2">행운의 메시지 등록</h1>
-          <p className="text-gray-500">선물 받을 분에게 전할 메시지를 작성하세요</p>
+          <h1 className="text-2xl font-bold text-[#5D4037] mb-2">
+            <span className={theme.color}>{theme.name}</span>에게
+          </h1>
+          <p className="text-gray-500">행운의 메시지를 담아주세요</p>
         </div>
 
         <div className="bg-white p-6 rounded-[2rem] shadow-xl border-2 border-stone-100">
-          <label className="block text-[#5D4037] text-lg mb-3 font-bold">1. 어떤 모찌를 보낼까요?</label>
-          <div className="flex justify-between mb-6 px-1 gap-1">
-            {(Object.keys(fortunes) as FortuneTheme[]).map((color) => (
-              <button
-                key={color}
-                onClick={() => setSelectedColor(color)}
-                className={`w-12 h-12 rounded-full flex items-center justify-center text-xl border-2 transition-all
-                  ${selectedColor === color ? 'scale-110 border-[#5D4037] shadow-md' : 'border-transparent opacity-50 hover:opacity-100'}
-                  ${fortunes[color].bg}`}
-              >
-                {fortunes[color].icon}
-              </button>
-            ))}
+          {/* 선택된 모찌 정보 */}
+          <div className={`flex items-center gap-3 p-4 rounded-xl ${theme.bg} border ${theme.border} mb-6`}>
+            <div className="text-3xl">{theme.icon}</div>
+            <div>
+              <div className={`font-bold ${theme.color}`}>{theme.name}</div>
+              <div className="text-gray-500 text-sm">{theme.desc}</div>
+            </div>
           </div>
 
-          <div className="text-center mb-6 p-3 rounded-xl bg-gray-50">
-            <span className={`font-bold ${fortunes[selectedColor].color}`}>
-              {fortunes[selectedColor].name}
-            </span>
-            <span className="text-gray-400 text-sm ml-2">
-              {fortunes[selectedColor].desc}
-            </span>
-          </div>
-
-          <label className="block text-[#5D4037] text-lg mb-3 font-bold">2. 행운의 메시지</label>
+          <label className="block text-[#5D4037] text-lg mb-3 font-bold">행운의 메시지</label>
           <textarea
             value={inputMsg}
             onChange={(e) => setInputMsg(e.target.value)}
             placeholder="예: 00아, 항상 응원해! 행복한 일만 가득하길 💕"
-            className="w-full h-32 p-4 rounded-xl bg-gray-50 border-2 border-dashed border-gray-300 focus:border-pink-300 focus:outline-none text-lg resize-none mb-6"
+            className="w-full h-36 p-4 rounded-xl bg-gray-50 border-2 border-dashed border-gray-300 focus:border-pink-300 focus:outline-none text-lg resize-none mb-2"
             maxLength={500}
           />
+          <div className="text-right text-sm text-gray-400 mb-4">
+            {inputMsg.length}/500
+          </div>
 
           <button
             onClick={saveMessage}
