@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { supabase } from '../utils/supabaseClient';
 import confetti from 'canvas-confetti';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sparkles, MailOpen, Mail, Clock } from 'lucide-react';
+import { Heart, Sparkles, MailOpen, Mail, Clock, Share2, Copy, Check } from 'lucide-react';
 import { fortunes, FortuneTheme } from '../data/fortunes';
 
 function HomeContent() {
@@ -24,6 +24,7 @@ function HomeContent() {
   const [isLetterOpen, setIsLetterOpen] = useState(false);
   const [fortuneText, setFortuneText] = useState("");
   const [isFlipped, setIsFlipped] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   // 테마 설정
   const theme = fortunes[selectedColor] || fortunes.pink;
@@ -71,6 +72,39 @@ function HomeContent() {
     if (savedDate === todayStr && savedContent) {
       setFortuneText(savedContent);
       setIsFlipped(true);
+    }
+  };
+
+  // --- 공유하기 ---
+  const shareFortune = async () => {
+    const shareText = `🐰 오늘의 ${theme.name} 운세\n\n"${fortuneText}"\n\n나도 행운 받으러 가기 👉`;
+    const shareUrl = window.location.origin;
+
+    // Web Share API 지원 시
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Tea Party - 오늘의 운세',
+          text: shareText,
+          url: shareUrl,
+        });
+      } catch (err) {
+        // 사용자가 취소한 경우
+      }
+    } else {
+      // 미지원 시 클립보드 복사
+      copyFortune();
+    }
+  };
+
+  const copyFortune = async () => {
+    const copyText = `🐰 오늘의 ${theme.name} 운세\n\n"${fortuneText}"\n\n나도 행운 받으러 가기 👉 ${window.location.origin}`;
+    try {
+      await navigator.clipboard.writeText(copyText);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (err) {
+      alert('복사에 실패했어요');
     }
   };
 
@@ -175,6 +209,13 @@ function HomeContent() {
                         <div className={`font-bold text-lg ${f.color}`}>{f.name}</div>
                         <div className="text-gray-500 text-sm">{f.desc}</div>
                       </div>
+                      <a
+                        href="#"
+                        onClick={(e) => { e.preventDefault(); alert('준비 중이에요! 곧 만나요 🐰'); }}
+                        className={`px-4 py-2 rounded-xl text-sm font-bold ${f.color} bg-white border ${f.border} hover:scale-105 transition-transform shadow-sm`}
+                      >
+                        구매하기
+                      </a>
                     </div>
                   );
                 })}
@@ -268,7 +309,25 @@ function HomeContent() {
                   </button>
                 ) : (
                   <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="text-center w-full">
-                    <p className="text-[#5D4037] text-2xl font-medium break-keep leading-relaxed">"{fortuneText}"</p>
+                    <p className="text-[#5D4037] text-2xl font-medium break-keep leading-relaxed mb-4">"{fortuneText}"</p>
+                    <div className="flex justify-center gap-2">
+                      <button
+                        onClick={shareFortune}
+                        className="flex items-center gap-1 px-4 py-2 bg-[#5D4037] text-white rounded-xl text-sm font-bold hover:bg-[#4E342E] transition-colors"
+                      >
+                        <Share2 size={16} /> 공유하기
+                      </button>
+                      <button
+                        onClick={copyFortune}
+                        className={`flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-bold transition-colors ${
+                          isCopied
+                            ? 'bg-green-500 text-white'
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        }`}
+                      >
+                        {isCopied ? <><Check size={16} /> 복사됨!</> : <><Copy size={16} /> 복사</>}
+                      </button>
+                    </div>
                   </motion.div>
                 )}
               </div>
@@ -305,7 +364,6 @@ function HomeContent() {
               </div>
             )}
 
-            <button onClick={() => { localStorage.clear(); window.location.reload(); }} className="mt-4 text-gray-300 text-xs underline w-full text-center">[테스트] 초기화</button>
           </motion.div>
         )}
       </AnimatePresence>
