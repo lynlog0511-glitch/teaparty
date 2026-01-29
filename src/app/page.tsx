@@ -276,6 +276,24 @@ function HomeContent() {
 
             <p className="mt-6 text-center text-gray-400 text-sm">매일 하루 한 번, 당신의 행운을 확인하세요 🍀</p>
 
+            {/* 다른 모찌 구경하기 버튼 */}
+            <a
+              href="/"
+              className="mt-6 flex items-center justify-center gap-3 bg-white p-4 rounded-2xl shadow-md border-2 border-stone-100 hover:shadow-lg transition-all group"
+            >
+              <div className="flex -space-x-2">
+                {(Object.keys(fortunes) as FortuneTheme[]).map((color) => (
+                  <span
+                    key={color}
+                    className={`w-8 h-8 rounded-full ${fortunes[color].bg} border-2 border-white flex items-center justify-center text-sm group-hover:scale-110 transition-transform`}
+                  >
+                    {fortunes[color].icon}
+                  </span>
+                ))}
+              </div>
+              <span className="text-[#5D4037] font-bold">다른 모찌 구경하기 →</span>
+            </a>
+
             {isLetterOpen && (
               <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-6">
                 <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white w-full max-w-sm rounded-[2rem] p-8 relative flex flex-col items-center">
