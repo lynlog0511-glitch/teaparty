@@ -1,79 +1,56 @@
-export type FortuneTheme = 'green' | 'pink' | 'yellow' | 'white' | 'black';
+// src/data/fortunes.ts
+// 이제 메시지 배열(messages)은 필요 없고, 테마 정보만 남깁니다!
 
-export const fortunes = {
-  green: {
-    name: "새싹 토끼",
-    color: "text-green-600",
-    bg: "bg-green-50",
-    border: "border-green-200",
-    icon: "🌱",
-    desc: "건강 & 힐링",
-    messages: [
-      "주인님, 잠깐 기지개 한번 켤까요? 몸이 가벼워질 거예요!",
-      "오늘은 눈을 감고 3분만 쉬어봐요. 머리가 맑아져요.",
-      "초록색 채소를 먹으면 호랑이 기운이 솟아날지도 몰라요!",
-      "무리하지 마세요. 당신은 존재만으로도 소중하니까요.",
-      "걱정 마세요, 당신의 마음에도 곧 새싹이 돋아날 거예요."
-    ]
-  },
+export type FortuneTheme = 'pink' | 'yellow' | 'white' | 'purple' | 'soda';
+
+interface FortuneMeta {
+  name: string;
+  color: string;
+  bg: string;
+  border: string;
+  icon: string;
+  desc: string;
+}
+
+export const fortunes: Record<FortuneTheme, FortuneMeta> = {
   pink: {
-    name: "복숭아 토끼",
+    name: "벚꽃 모찌",
     color: "text-pink-600",
     bg: "bg-pink-50",
     border: "border-pink-200",
     icon: "🌸",
-    desc: "사랑 & 설렘",
-    messages: [
-      "어머! 오늘 왠지 설레는 일이 생길 것 같은 예감이에요!",
-      "당신의 사랑스러운 미소가 누군가의 하루를 밝혔다네요.",
-      "오늘은 핑크색 아이템을 착용해보세요. 매력 지수 UP!",
-      "좋아하는 사람에게 먼저 연락해보기 딱 좋은 날이에요.",
-      "당신은 사랑받기 위해 태어난 사람, 잊지 마세요!"
-    ]
+    desc: "연애운 & 설렘",
   },
   yellow: {
-    name: "유자 토끼",
+    name: "유자 모찌",
     color: "text-yellow-600",
     bg: "bg-yellow-50",
     border: "border-yellow-200",
-    icon: "🍋",
-    desc: "재물 & 행운",
-    messages: [
-      "띠링! 곧 기분 좋은 소식이 들려올 것 같아요.",
-      "혹시 모르죠? 오늘 산 로또가 대박이 날지!",
-      "생각지도 못한 곳에서 용돈을 줍거나 이득을 볼 수 있어요.",
-      "오늘은 당신의 감을 믿어보세요. 촉이 좋은 날이에요!",
-      "황금빛 행운이 당신을 따라다니고 있어요."
-    ]
+    icon: "🍊", 
+    desc: "재물운 & 득템",
   },
   white: {
-    name: "순무 토끼",
-    color: "text-slate-600",
-    bg: "bg-slate-50",
-    border: "border-slate-200",
-    icon: "☁️",
-    desc: "학업 & 시작",
-    messages: [
-      "하얀 도화지처럼, 오늘은 무엇이든 될 수 있는 날이에요.",
-      "집중력이 최고조! 미뤄왔던 일을 처리하기 딱 좋아요.",
-      "차분한 마음으로 시작하면 정답이 보일 거예요.",
-      "당신의 노력은 배신하지 않아요. 차곡차곡 쌓이고 있답니다.",
-      "천천히 가도 괜찮아요. 방향만 맞다면요."
-    ]
+    name: "우유 모찌",
+    color: "text-stone-600",
+    bg: "bg-stone-50",
+    border: "border-stone-200",
+    icon: "🥛",
+    desc: "건강운 & 치유",
   },
-  black: {
-    name: "흑임자 토끼",
-    color: "text-slate-800",
-    bg: "bg-gray-100",
-    border: "border-gray-300",
+  purple: {
+    name: "블루베리 모찌",
+    color: "text-purple-600",
+    bg: "bg-purple-50",
+    border: "border-purple-200",
     icon: "🫐",
-    desc: "액막이 & 보호",
-    messages: [
-      "걱정 마세요! 나쁜 기운은 제가 다 냠냠 먹어버렸어요.",
-      "오늘은 든든한 제가 지켜드릴게요. 어깨 펴고 당당하게!",
-      "골치 아픈 일이 있어도 스르륵 해결될 거예요.",
-      "당신의 시크한 매력이 빛을 발하는 날입니다.",
-      "싫은 건 싫다고 말해도 돼요. 제가 뒤에 있잖아요!"
-    ]
+    desc: "학업운 & 지혜",
+  },
+  soda: {
+    name: "소다 모찌",
+    color: "text-sky-600",
+    bg: "bg-sky-50",
+    border: "border-sky-200",
+    icon: "🥤",
+    desc: "액막이 & 상쾌",
   }
 };
