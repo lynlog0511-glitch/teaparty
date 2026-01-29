@@ -5,7 +5,14 @@ import { useSearchParams } from 'next/navigation';
 import { supabase } from '../utils/supabaseClient';
 import confetti from 'canvas-confetti';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sparkles, MailOpen, Mail, Clock, Share2, Copy, Check } from 'lucide-react';
+import { Heart, Sparkles, MailOpen, Mail, Clock, Share2, Copy, Check, ScrollText } from 'lucide-react';
+
+// 히스토리 타입
+interface FortuneHistoryEntry {
+  day: number;
+  content: string;
+  date: string;
+}
 import { fortunes, FortuneTheme } from '../data/fortunes';
 
 function HomeContent() {
@@ -25,6 +32,8 @@ function HomeContent() {
   const [fortuneText, setFortuneText] = useState("");
   const [isFlipped, setIsFlipped] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [fortuneHistory, setFortuneHistory] = useState<FortuneHistoryEntry[]>([]);
 
   // 테마 설정
   const theme = fortunes[selectedColor] || fortunes.pink;
@@ -73,6 +82,33 @@ function HomeContent() {
       setFortuneText(savedContent);
       setIsFlipped(true);
     }
+
+    // 히스토리 로드
+    loadFortuneHistory(color);
+  };
+
+  // 히스토리 로드
+  const loadFortuneHistory = (color: string) => {
+    const historyJson = localStorage.getItem(`fortune_history_${color}`);
+    if (historyJson) {
+      setFortuneHistory(JSON.parse(historyJson));
+    }
+  };
+
+  // 히스토리에 추가
+  const addToHistory = (color: string, content: string) => {
+    const historyJson = localStorage.getItem(`fortune_history_${color}`);
+    const history: FortuneHistoryEntry[] = historyJson ? JSON.parse(historyJson) : [];
+
+    const newEntry: FortuneHistoryEntry = {
+      day: history.length + 1,
+      content,
+      date: new Date().toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })
+    };
+
+    const newHistory = [...history, newEntry];
+    localStorage.setItem(`fortune_history_${color}`, JSON.stringify(newHistory));
+    setFortuneHistory(newHistory);
   };
 
   // --- 공유하기 ---
@@ -160,6 +196,9 @@ function HomeContent() {
 
       seenIds.push(randomId);
       localStorage.setItem(`seen_ids_${currentTheme}`, JSON.stringify(seenIds));
+
+      // 히스토리에 추가
+      addToHistory(currentTheme, data.content);
 
       setIsFlipped(true);
       confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
@@ -290,6 +329,11 @@ function HomeContent() {
             <header className="flex justify-between items-center mb-6 px-2">
               <h1 className="text-3xl font-bold text-[#5D4037]">Tea Party 🫖</h1>
               <div className="flex gap-2">
+                {fortuneHistory.length > 0 && (
+                  <button onClick={() => setIsHistoryOpen(true)} className="w-8 h-8 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-400 hover:text-amber-500">
+                    <ScrollText size={16} />
+                  </button>
+                )}
                 {dbMessage && (
                   <button onClick={() => setIsLetterOpen(true)} className="w-8 h-8 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-400 hover:text-pink-500">
                     <Mail size={16} />
@@ -360,6 +404,32 @@ function HomeContent() {
                   <MailOpen className="text-pink-400 w-8 h-8 mb-4" />
                   <h3 className="text-xl font-bold text-[#5D4037] mb-4">보관된 편지 💌</h3>
                   <div className="bg-gray-50 p-5 rounded-xl w-full border border-dashed border-gray-300 text-center text-[#5D4037] text-lg">{dbMessage}</div>
+                </motion.div>
+              </div>
+            )}
+
+            {/* 운세 히스토리 모달 */}
+            {isHistoryOpen && (
+              <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-6">
+                <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white w-full max-w-sm rounded-[2rem] p-6 relative max-h-[80vh] flex flex-col">
+                  <button onClick={() => setIsHistoryOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10">✕</button>
+                  <div className="flex items-center gap-2 mb-4">
+                    <ScrollText className="text-amber-500 w-6 h-6" />
+                    <h3 className="text-xl font-bold text-[#5D4037]">운세 히스토리 📜</h3>
+                  </div>
+                  <p className="text-gray-500 text-sm mb-4">지금까지 받은 {fortuneHistory.length}개의 행운</p>
+
+                  <div className="overflow-y-auto flex-1 space-y-3 pr-2">
+                    {[...fortuneHistory].reverse().map((entry) => (
+                      <div key={entry.day} className={`p-4 rounded-xl ${theme.bg} border ${theme.border}`}>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className={`font-bold ${theme.color}`}>Day {entry.day}</span>
+                          <span className="text-gray-400 text-sm">{entry.date}</span>
+                        </div>
+                        <p className="text-[#5D4037] text-sm break-keep">"{entry.content}"</p>
+                      </div>
+                    ))}
+                  </div>
                 </motion.div>
               </div>
             )}
