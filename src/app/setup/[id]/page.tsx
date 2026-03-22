@@ -4,8 +4,28 @@ import { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import { supabase } from '../../../utils/supabaseClient';
 import { motion } from 'framer-motion';
-import { Gift, Check, Sparkles, Save } from 'lucide-react';
+import { Check, Sparkles, Save } from 'lucide-react';
 import { fortunes, FortuneTheme } from '../../../data/fortunes';
+import Image from 'next/image';
+
+function MochiImage({ theme, size = 64, className = '' }: { theme: typeof fortunes[FortuneTheme]; size?: number; className?: string }) {
+  const [imgError, setImgError] = useState(false);
+
+  if (imgError || !theme.image) {
+    return <span className={className} style={{ fontSize: size * 0.6 }}>{theme.icon}</span>;
+  }
+
+  return (
+    <Image
+      src={theme.image}
+      alt={theme.name}
+      width={size}
+      height={size}
+      className={className}
+      onError={() => setImgError(true)}
+    />
+  );
+}
 
 export default function SetupPage() {
   const params = useParams();
@@ -14,7 +34,6 @@ export default function SetupPage() {
   const rabbitId = params.id as string;
   const colorParam = searchParams.get('color') as FortuneTheme | null;
 
-  // 색상: URL 파라미터에서 가져오거나 기본값 pink
   const selectedColor: FortuneTheme =
     colorParam && Object.keys(fortunes).includes(colorParam)
       ? colorParam
@@ -26,7 +45,6 @@ export default function SetupPage() {
   const [inputMsg, setInputMsg] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
-  // 초기 상태 체크
   useEffect(() => {
     async function checkStatus() {
       const { data } = await supabase
@@ -44,7 +62,6 @@ export default function SetupPage() {
     checkStatus();
   }, [rabbitId]);
 
-  // 메시지 저장
   const saveMessage = async () => {
     if (!inputMsg.trim()) return alert('메시지를 입력해주세요!');
 
@@ -61,16 +78,17 @@ export default function SetupPage() {
     setIsSaving(false);
   };
 
-  // 로딩
   if (status === 'loading') {
     return (
       <main className="min-h-screen flex items-center justify-center bg-[#FFFDF5] font-[Gaegu]">
-        <div className="animate-pulse text-[#5D4037] text-xl">로딩 중... 🐰</div>
+        <div className="animate-pulse text-[#5D4037] text-xl flex items-center gap-2">
+          <MochiImage theme={fortunes.pink} size={32} className="animate-bounce" />
+          로딩 중...
+        </div>
       </main>
     );
   }
 
-  // 이미 등록됨
   if (status === 'registered') {
     return (
       <main className="min-h-screen flex items-center justify-center p-4 bg-[#FFFDF5] font-[Gaegu]">
@@ -87,7 +105,9 @@ export default function SetupPage() {
             <p className="text-gray-500 text-lg mb-6">
               이 모찌에는 이미 메시지가<br />등록되어 있습니다
             </p>
-            <div className="text-6xl mb-6">💝</div>
+            <div className="mb-6">
+              <MochiImage theme={theme} size={80} className="mx-auto" />
+            </div>
             <p className="text-gray-400 text-sm">
               선물 받는 분이 NFC를 터치하면<br />당신의 마음이 전달됩니다
             </p>
@@ -97,7 +117,6 @@ export default function SetupPage() {
     );
   }
 
-  // 등록 완료
   if (status === 'complete') {
     return (
       <main className="min-h-screen flex items-center justify-center p-4 bg-[#FFFDF5] font-[Gaegu]">
@@ -120,7 +139,9 @@ export default function SetupPage() {
                 선물 받는 분이 NFC를 터치하면<br />메시지와 함께 행운을 받게 됩니다
               </p>
             </div>
-            <div className="text-6xl mb-4">🎁</div>
+            <div className="mb-4">
+              <MochiImage theme={theme} size={80} className="mx-auto" />
+            </div>
             <p className="text-gray-400 text-sm">이 창은 닫아도 괜찮아요</p>
           </div>
         </motion.div>
@@ -128,7 +149,6 @@ export default function SetupPage() {
     );
   }
 
-  // 등록 폼
   return (
     <main className="min-h-screen flex items-center justify-center p-4 bg-[#FFFDF5] font-[Gaegu]">
       <motion.div
@@ -137,8 +157,8 @@ export default function SetupPage() {
         className="w-full max-w-sm"
       >
         <div className="text-center mb-8">
-          <div className={`w-20 h-20 ${theme.bg} rounded-full flex items-center justify-center mx-auto mb-4 text-4xl border-2 ${theme.border}`}>
-            {theme.icon}
+          <div className={`w-20 h-20 ${theme.bg} rounded-full flex items-center justify-center mx-auto mb-4 border-2 ${theme.border} overflow-hidden`}>
+            <MochiImage theme={theme} size={56} />
           </div>
           <h1 className="text-2xl font-bold text-[#5D4037] mb-2">
             <span className={theme.color}>{theme.name}</span>에게
@@ -147,9 +167,8 @@ export default function SetupPage() {
         </div>
 
         <div className="bg-white p-6 rounded-[2rem] shadow-xl border-2 border-stone-100">
-          {/* 선택된 모찌 정보 */}
           <div className={`flex items-center gap-3 p-4 rounded-xl ${theme.bg} border ${theme.border} mb-6`}>
-            <div className="text-3xl">{theme.icon}</div>
+            <MochiImage theme={theme} size={40} />
             <div>
               <div className={`font-bold ${theme.color}`}>{theme.name}</div>
               <div className="text-gray-500 text-sm">{theme.desc}</div>
@@ -160,7 +179,7 @@ export default function SetupPage() {
           <textarea
             value={inputMsg}
             onChange={(e) => setInputMsg(e.target.value)}
-            placeholder="예: 00아, 항상 응원해! 행복한 일만 가득하길 💕"
+            placeholder="예: 00아, 항상 응원해! 행복한 일만 가득하길"
             className="w-full h-36 p-4 rounded-xl bg-gray-50 border-2 border-dashed border-gray-300 focus:border-pink-300 focus:outline-none text-lg resize-none mb-2"
             maxLength={500}
           />

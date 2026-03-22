@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 72" width="260" height="72">
+  <!-- Small mochi bunny icon -->
+  <g transform="translate(6, 8) scale(0.3)">
+    <!-- Ears -->
+    <path d="M32 52 C30 36, 24 16, 28 8 C31 2, 38 2, 40 10 C42 18, 40 38, 38 50" fill="#5D4037"/>
+    <path d="M58 52 C60 36, 66 16, 62 8 C59 2, 52 2, 50 10 C48 18, 50 38, 52 50" fill="#5D4037"/>
+    <!-- Head -->
+    <path d="M22 70 C20 55, 26 44, 36 42 C42 40, 48 40, 54 42 C64 44, 70 55, 68 70 C66 82, 60 90, 52 92 C48 93, 42 93, 38 92 C30 90, 24 82, 22 70Z" fill="#5D4037"/>
+    <!-- Leaf -->
+    <path d="M45 46 C42 42, 37 41, 39 37 C40 35, 45 36, 45 38 C45 36, 50 35, 51 37 C53 41, 48 42, 45 46Z" fill="#90EE90"/>
+  </g>
+  <!-- Tea Party text -->
+  <text x="42" y="50" font-family="'Gaegu', cursive, sans-serif" font-size="40" font-weight="700" fill="#5D4037" letter-spacing="1.5">Tea Party</text>
+  <!-- Small heart -->
+  <path d="M232 18 C230 14, 224 14, 226 10 C227 8, 232 9, 232 11 C232 9, 237 8, 238 10 C240 14, 234 14, 232 18Z" fill="#FFB5C5" opacity="0.6"/>
+</svg>

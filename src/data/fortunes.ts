@@ -1,5 +1,4 @@
 // src/data/fortunes.ts
-// 이제 메시지 배열(messages)은 필요 없고, 테마 정보만 남깁니다!
 
 export type FortuneTheme = 'pink' | 'yellow' | 'white' | 'purple' | 'soda';
 
@@ -9,6 +8,7 @@ interface FortuneMeta {
   bg: string;
   border: string;
   icon: string;
+  image: string;
   desc: string;
 }
 
@@ -19,6 +19,7 @@ export const fortunes: Record<FortuneTheme, FortuneMeta> = {
     bg: "bg-pink-50",
     border: "border-pink-200",
     icon: "🌸",
+    image: "/images/mochi/pink.svg",
     desc: "연애운 & 설렘",
   },
   yellow: {
@@ -26,7 +27,8 @@ export const fortunes: Record<FortuneTheme, FortuneMeta> = {
     color: "text-yellow-600",
     bg: "bg-yellow-50",
     border: "border-yellow-200",
-    icon: "🍊", 
+    icon: "🍊",
+    image: "/images/mochi/yellow.svg",
     desc: "재물운 & 득템",
   },
   white: {
@@ -35,6 +37,7 @@ export const fortunes: Record<FortuneTheme, FortuneMeta> = {
     bg: "bg-stone-50",
     border: "border-stone-200",
     icon: "🥛",
+    image: "/images/mochi/white.svg",
     desc: "건강운 & 치유",
   },
   purple: {
@@ -43,6 +46,7 @@ export const fortunes: Record<FortuneTheme, FortuneMeta> = {
     bg: "bg-purple-50",
     border: "border-purple-200",
     icon: "🫐",
+    image: "/images/mochi/purple.svg",
     desc: "학업운 & 지혜",
   },
   soda: {
@@ -51,6 +55,7 @@ export const fortunes: Record<FortuneTheme, FortuneMeta> = {
     bg: "bg-sky-50",
     border: "border-sky-200",
     icon: "🥤",
+    image: "/images/mochi/soda.svg",
     desc: "액막이 & 상쾌",
   }
 };

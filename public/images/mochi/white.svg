@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- White Mochi Bunny -->
+  <!-- Left Ear -->
+  <path d="M68 88 C64 68, 56 42, 60 28 C63 18, 72 16, 78 24 C84 32, 82 62, 80 84"
+        fill="#FAFAFA" stroke="#3E2723" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M70 82 C68 65, 62 45, 65 34 C67 27, 73 26, 76 32 C79 38, 78 60, 77 78"
+        fill="#F0E0E8" stroke="none"/>
+  <!-- Right Ear -->
+  <path d="M132 88 C136 68, 144 42, 140 28 C137 18, 128 16, 122 24 C116 32, 118 62, 120 84"
+        fill="#FAFAFA" stroke="#3E2723" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M130 82 C132 65, 138 45, 135 34 C133 27, 127 26, 124 32 C121 38, 122 60, 123 78"
+        fill="#F0E0E8" stroke="none"/>
+  <!-- Body/Face -->
+  <path d="M54 118 C52 96, 60 80, 78 76 C88 73, 112 73, 122 76 C140 80, 148 96, 146 118 C144 138, 136 154, 118 158 C108 160, 92 160, 82 158 C64 154, 56 138, 54 118Z"
+        fill="#FAFAFA" stroke="#3E2723" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Heart Leaf -->
+  <path d="M100 82 C96 76, 87 74, 91 67 C93 63, 100 65, 100 69 C100 65, 107 63, 109 67 C113 74, 104 76, 100 82Z"
+        fill="#FFD1DC" stroke="#3E2723" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Eyes -->
+  <circle cx="86" cy="114" r="4" fill="#3E2723"/>
+  <circle cx="114" cy="114" r="4" fill="#3E2723"/>
+  <!-- Mouth - w shape -->
+  <path d="M94 126 C96 129, 98 129, 100 127 C102 129, 104 129, 106 126" fill="none" stroke="#3E2723" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Blush -->
+  <ellipse cx="74" cy="122" rx="8" ry="5.5" fill="#FFD1DC" opacity="0.45"/>
+  <ellipse cx="126" cy="122" rx="8" ry="5.5" fill="#FFD1DC" opacity="0.45"/>
+</svg>
